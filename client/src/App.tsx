@@ -7,7 +7,7 @@ const App = () => {
         const data = new FormData();
         if(e && e !== null && e.currentTarget && e.currentTarget.files){
             const imagedata = e.currentTarget.files[0];
-            data.append('inputname', imagedata);
+            data.append('attachment', imagedata);
             fetch("http://localhost:4000/upload", {
                 mode: 'no-cors',
                 method: "POST",
