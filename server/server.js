@@ -1,7 +1,7 @@
 import express from "express";
 import multiparty from "multiparty";
 import bodyParser from "body-parser";
-import ffmpeg from "ffmpeg";
+import ffmpeg  from "fluent-ffmpeg";
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -33,26 +33,17 @@ app.post("/upload", (req, res) => {
     let form = new multiparty.Form();
     form.parse(req, function(err, fields, files) {
         if(err === null){
-            try {
-                new ffmpeg(files.attachment[0].path, function (err, video) {
-
-                    if (!err) {
-                        video
-                            .save(`video_w.mp4`, function (error, file) {
-                                console.log(file)
-                                console.log(error)
-                                if (!error)
-                                    console.log('Video file: ' + file);
-                            });
-                        // console.log('The video is ready to be processed');
-                    } else {
-                        // console.log('Error: ' + err);
-                    }
-                });
-            } catch (e) {
-                // console.log(e.code);
-                // console.log(e.msg);
-            }
+            // try {
+                // let command = ffmpeg(files.attachment[0].path)
+               let command = ffmpeg('drop.avi')
+                    .audioCodec('libfaac')
+                    .videoCodec('libx264')
+                    .format('mp4')
+                   .save('medium.mp4');
+            // } catch (e) {
+            //     // console.log(e.code);
+            //     // console.log(e.msg);
+            // }
         }
         // res.writeHead(200, { 'content-type': 'text/plain' });
         // res.write('received upload:\n\n');
